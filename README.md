@@ -1,6 +1,6 @@
 # vue-todo
 
-> A Vue.js project
+> A Vue.js based TODO Application.
 
 ## Build Setup
 
