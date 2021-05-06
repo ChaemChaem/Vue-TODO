@@ -1,46 +1,28 @@
 <template>
   <div>
-      <ul>
-          <li v-for="(todo, index) in todoList" v-bind:key="todo.item" class="shadow">
+      <transition-group name="list" tag="ul">
+          <li v-for="(todo, index) in propsdata" v-bind:key="todo.item" class="shadow">
               <i class="checkBtn fas fa-check" v-bind:class="{checkBtnCompleted: todo.completed}" v-on:click="toggleComplete(todo, index)"></i>
               <span v-bind:class="{textCompleted: todo.completed}">{{ todo.item }}</span>
               <span class="removeBtn" v-on:click="removeTodo(todo, index)">
                   <i class="fas fa-trash-alt"></i>
               </span>
           </li>
-      </ul>
+      </transition-group>
   </div>
 </template>
 
 <script>
 export default {
-    data: function() {
-        return {
-            todoList: []
-        }
-    },
+    props: ['propsdata'],
     methods: {
         removeTodo: function(todo, index)
         {
-            localStorage.removeItem(todo);
-            this.todoList.splice(index, 1);
+            this.$emit('removeTodoEvent', todo, index);
         },
         toggleComplete: function(todo, index)
         {
-            todo.completed = !todo.completed;
-            localStorage.removeItem(todo.item);
-            localStorage.setItem(todo.item, JSON.stringify(todo));
-        }
-    },
-    created: function() {
-        if (localStorage.length > 0)
-        {
-            for (var i = 0; i < localStorage.length; i++)
-            {
-                if (localStorage.key(i) === 'loglevel:webpack-dev-server') continue;
-
-                this.todoList.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-            }
+            this.$emit('toggleTodoEvent', todo, index);
         }
     }
 }
@@ -78,5 +60,14 @@ li {
 .textCompleted {
     text-decoration: line-through;
     color: #b3adad;
+}
+
+/* list transition eff */
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>
