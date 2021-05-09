@@ -21,27 +21,30 @@
 import Modal from './common/Modal.vue';
 
 export default {
-    data: function() {
+    data() {
         return {
             newTodo: "",
             showModal: false
         }
     },
     methods: {
-        addTodo: function() {
+        addTodo() {
             if (this.newTodo !== '') {
-                this.$emit('addTodoEvent', this.newTodo);
+                // this.$emit('addTodoEvent', this.newTodo);
+                const text = this.newTodo.trim();
+                this.$store.commit('addOneTodo', text);
                 this.clearInput();
             } else {
                 this.showModal = !this.showModal;
             }
         },
-        clearInput: function() {
+        clearInput() {
             this.newTodo = '';
         }
     },
     components: {
-        Modal: Modal
+        Modal
+        //Modal: Modal
     }
 }
 </script>

@@ -1,11 +1,9 @@
 <template>
   <div id="app">
     <TodoHeader></TodoHeader>
-    <TodoInput v-on:addTodoEvent="addOneTodo"></TodoInput>
-    <TodoList v-bind:propsdata="todoList"
-              v-on:removeTodoEvent="removeOneTodo"
-              v-on:toggleTodoEvent="toggleOneTodo"></TodoList>
-    <TodoFooter v-on:clearAllEvent="clearAllTodo"></TodoFooter>
+    <TodoInput></TodoInput>
+    <TodoList></TodoList>
+    <TodoFooter></TodoFooter>
   </div>
 </template>
 
@@ -16,50 +14,11 @@ import TodoList from './components/TodoList.vue';
 import TodoFooter from './components/TodoFooter.vue';
 
 export default {
-  data: function() {
-      return {
-          todoList: []
-      }
-  },
-  methods: {
-    addOneTodo: function(todo) {
-      var obj = { completed: false, item: todo };
-      localStorage.setItem(todo, JSON.stringify(obj));
-      this.todoList.push(obj);
-    },
-    removeOneTodo: function(todo, index) {
-      localStorage.removeItem(todo.item);
-      this.todoList.splice(index, 1);
-    },
-    toggleOneTodo: function(todo, index) {
-      //todo.completed = !todo.completed;
-      // 위와 동일하나, 위는 아래로 왔다 갔다온 데이터로 갱신 / 아래는 곧바로 현재 todoList 갱신
-      this.todoList[index].completed = !this.todoList[index].completed;
-      
-      localStorage.removeItem(todo.item);
-      localStorage.setItem(todo.item, JSON.stringify(todo));
-    },
-    clearAllTodo: function() {
-      localStorage.clear();
-      this.todoList = [];
-    }
-  },
-  created: function() {
-    if (localStorage.length > 0)
-    {
-      for (var i = 0; i < localStorage.length; i++)
-      {
-          if (localStorage.key(i) === 'loglevel:webpack-dev-server') continue;
-
-          this.todoList.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-      }
-    }
-  },
   components: {
-    'TodoHeader': TodoHeader,
-    'TodoInput': TodoInput,
-    'TodoList': TodoList,
-    'TodoFooter': TodoFooter,
+    TodoHeader,
+    TodoInput,
+    TodoList,
+    TodoFooter
   }
 }
 </script>
